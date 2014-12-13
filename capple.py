@@ -1,25 +1,35 @@
 # http://www.codechef.com/DEC14/problems/CAPPLE
 
 def pluck(trees):
+	# check if all the elements in the list are the same
+	different = False
+	dummy = trees[0]
+	for i in trees:
+		if i != dummy:
+			different = True
+			break
+
+	if not different:
+		return [0]*len(trees)
 
 	# find the biggest and the second biggest number in the list
-	maximum = max(trees)
-	second_max = max( map(lambda x: -1 if x == maximum else x, trees) )
+	first, second = None, None
+	for n in trees:
+	    if n > first:
+	        first, second = n, first
+	    elif first > n > second:
+	        second = n
 
-	if maximum == second_max:
-		return [0]*len(trees)
-	else:
-		diff = maximum - second_max
-		return map(lambda x: x - diff if x == maximum else x, trees)
+	diff = first - second
+	return map(lambda x: x - diff if x == first else x, trees)
 
 def time(trees):
 	counter = 0
 	while not all(i == 0 for i in trees):
 		trees = pluck(trees)
 		counter += 1
-	return counter - 1
+	return counter
 
-'''print time(range(1,1000))'''
 inputs = int(raw_input())
 while inputs:
 	length = int(raw_input())
