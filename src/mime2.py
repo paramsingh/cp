@@ -14,7 +14,7 @@ for i in range(0, num_types):
 	if not filetype in type_dict:
 		type_dict[filetype] = [extension]
 	else:
-		type_dict[filetype] = type_dict[filetype] + [extension]
+		type_dict[filetype].extend(extension)
 
 
 def find_filetype(filename):
