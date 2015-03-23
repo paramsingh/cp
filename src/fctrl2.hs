@@ -1,17 +1,11 @@
-fact :: Integer -> String
-fact n = show $ product [2..n]
+fact :: Integer -> Integer
+fact n = product [2..n]
 
-doterms :: Int -> IO ()
-doterms 1 = do
-            a <- getLine
-            putStrLn . fact $ (read a::Integer)
-            return ()
-doterms x = do
-            a <- getLine
-            putStrLn . fact $ (read a::Integer)
-            doterms (x-1)
+findfact = do
+            n <- readLn
+            print $ fact n
 
 main = do
-        terms <- getLine
-        doterms (read terms:: Int)
-
+        terms <- readLn
+        sequence $ replicate terms findfact
+        return ()
