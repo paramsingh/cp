@@ -1,2 +1,4 @@
 a.out
 *.hi
+*.class
+*.pyc
