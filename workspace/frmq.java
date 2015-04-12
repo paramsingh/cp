@@ -65,14 +65,15 @@ class FRMQ {
         int m = in.nextInt();
         int x = in.nextInt();
         int y = in.nextInt();
+        long sum = 0;
         for(i=0;i<m;i++){
             int max, min;
             max = x > y ? x : y;
             min = x > y ? y : x;
-            System.out.println("Range: "+ min+", "+max);
-            System.out.println(tree.query(min, max));
+            sum += tree.query(min, max);
             x = (x+7) % (n-1);
             y = (y+11) % n;
         }
+        System.out.println(sum);
     }
 }
