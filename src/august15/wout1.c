@@ -45,14 +45,14 @@ long long int query_tree(int* tree, int* lazy, int node, int a, int b, int i, in
 
 int main(void) {
     int t, li, hi;
-    long long int g, h, y, min;
+    unsigned long long int g, h, y, min;
     scanf("%d", &t);
     int a;
     for (a = 0; a < t; a++) {
-        scanf("%lld %lld", &g, &h);
+        scanf("%llu %llu", &g, &h);
         int i;
-        int* tree = (int *) calloc(10000000, 4);
-        int* lazy = (int *) calloc(10000000, 4);
+        int* tree = (int *) calloc(2097152, sizeof(int));
+        int* lazy = (int *) calloc(2097152, sizeof(int));
         for (i = 0; i < g; i++) {
             scanf("%d%d", &li, &hi);
             update_tree(tree, lazy, 1, 0, g-1, li, hi);
@@ -63,7 +63,7 @@ int main(void) {
             if (y < min)
                 min = y;
         }
-        printf("%lld\n", min);
+        printf("%llu\n", min);
         free(tree);
         free(lazy);
     }
