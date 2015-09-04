@@ -1,7 +1,6 @@
 // Author: Param Singh <paramsingh258@gmail.com>
 #include <stdio.h>
 #include <stdlib.h>
-
 int compare(const void* a, const void* b) {
     int *p = (int *) a;
     int *q = (int *) b;
@@ -21,18 +20,19 @@ int main(void) {
             scanf("%d", &arr[j]);
         }
         qsort(arr, m, 4, compare);
-        int start = 0;
-        int end = m-1;
+        int dup = m;
+        int index = 0;
         int ans = 0;
-        while (start < end) {
-            ans++;
-            if (arr[start] == 1) {
-                start++;
-                end--;
+        while (dup > 1) {
+            int x = arr[index];
+            index++;
+            if ( dup >= x + 1 ) {
+                dup -= x+1;
+                ans += x;
             }
             else {
-                arr[start]--;
-                end--;
+                ans += dup - 1;
+                dup = 1;
             }
         }
         printf("%d\n", ans);
