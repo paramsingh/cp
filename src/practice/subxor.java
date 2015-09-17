@@ -4,10 +4,14 @@ import java.io.*;
 class Trie {
     private class Node {
         int val;
+        int num[];
         Node children[];
         Node() {
             val = 0;
             children = new Node[2];
+            num = new int[2];
+            num[0] = 0;
+            num[1] = 0;
             children[0] = null;
             children[1] = null;
         }
@@ -17,15 +21,16 @@ class Trie {
 
     Trie() {
         root = new Node();
+        insert(0);
     }
 
     private void insert(Node vertex, int n, int bits) {
         if (bits == 0) {
-            vertex.val++;
             return;
         }
         else {
             int bit = (n >> (bits-1)) & 1;
+            vertex.num[bit]++;
             if (vertex.children[bit] == null) {
                 vertex.children[bit] = new Node();
             }
@@ -38,45 +43,47 @@ class Trie {
     }
 
     private int query(Node vertex, int n, int k, int bits) {
-        if (bits == 0) {
-            if (k <= 0)
-                return 0;
+        if (bits == -1 || vertex == null)
+            return 0;
+        int p = (n >> bits) & 1;
+        int q = (k >> bits) & 1;
+        if (q == 1) {
+            if (p == 0)
+                return vertex.num[0] + query(vertex.children[1], n, k, bits-1);
             else
-                return vertex.val;
+                return vertex.num[1] + query(vertex.children[0], n, k, bits-1);
         }
         else {
-            int v = (n >> (bits - 1)) & 1;
-            int r = (v == 0) ? 1 : 0;
-            int a = 0, b = 0;
-            if (vertex.children[v] != null)
-                a = query(vertex.children[v], n, k, bits-1);
-            if (vertex.children[r] != null)
-                b = query(vertex.children[r], n, k - (int) Math.pow(2, bits-1), bits-1);
-            return a + b;
+            if (p == 0)
+                return query(vertex.children[0], n, k, bits - 1);
+            else
+                return query(vertex.children[1], n, k, bits - 1);
         }
     }
 
     public int query(int n, int k) {
-        return query(root, n, k, 32);
+        return query(root, n, k, 31);
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        InputStreamReader isr = new InputStreamReader(System.in);
+        BufferedReader in = new BufferedReader(isr);
         int t = Integer.parseInt(in.readLine());
         for (int a = 0; a < t; a++) {
             Trie trie = new Trie();
             String s[] = in.readLine().split(" ");
             int size = Integer.parseInt(s[0]), k = Integer.parseInt(s[1]);
             String s1[] = in.readLine().split(" ");
-            int ans = 0, p = 0, q;
+            int p = 0, q;
+            long ans = 0;
             for (int i = 0; i < size; i++) {
                 int n = Integer.parseInt(s1[i]);
                 q = p ^ n;
                 ans += trie.query(q, k);
                 trie.insert(q);
                 p = q;
-            System.out.println(ans);
             }
+            System.out.println(ans);
         }
     }
 }
