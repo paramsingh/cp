@@ -2,7 +2,7 @@
 // A Lot Of Games: codeforces.com/problemset/problem/455/B
 
 import java.util.Scanner;
-class Trie {
+public class Trie {
     private class Node {
         int win, lose;
         Node children[];
@@ -31,24 +31,18 @@ class Trie {
         else {
             int next = s.charAt(0) - 'a';
             s = s.substring(1, s.length());
-            boolean flag = false;
             if (vertex.children[next] == null) {
-                flag = true;
                 vertex.children[next] = new Node();
             }
             if (s.length() % 2 == 0) {
-                vertex.lose = 1;
-                if (flag) {
-                    vertex.children[next].win = 1;
-                    vertex.children[next].lose = 0;
-                }
+                vertex.win = 1;
+                if (vertex.lose == -1)
+                    vertex.lose = 0;
             }
             else {
-                vertex.win = 1;
-                if (flag) {
-                    vertex.children[next].win = 0;
-                    vertex.children[next].lose = 1;
-                }
+                vertex.lose = 1;
+                if (vertex.win == -1)
+                    vertex.win = 0;
             }
             insert(vertex.children[next], s);
         }
@@ -75,6 +69,7 @@ class Trie {
             String s = in.next();
             t.insert(s);
         }
+
         if (t.canWin() && t.canLose()) {
             System.out.println("First");
         }
