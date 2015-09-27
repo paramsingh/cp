@@ -4,15 +4,18 @@
 import java.util.Scanner;
 public class Trie {
     private class Node {
+        int want;
+        int num;
         int win, lose;
         Node children[];
         Node() {
             children = new Node[26];
             for (int i = 0; i < 26; i++)
                 children[i] = null;
-            win  = -1;
+            num = 0;
+            want = -1;
+            win = -1;
             lose = -1;
-
         }
     }
 
@@ -24,40 +27,82 @@ public class Trie {
 
     private void insert(Node vertex, String s) {
         if (s.equals("")) {
-            vertex.win  = 1;
-            vertex.lose = 0;
             return;
         }
         else {
-            int next = s.charAt(0) - 'a';
+            int c = s.charAt(0) - 'a';
             s = s.substring(1, s.length());
-            if (vertex.children[next] == null) {
-                vertex.children[next] = new Node();
+            if (vertex.children[c] == null) {
+                vertex.num++;
+                vertex.children[c] = new Node();
             }
-            if (s.length() % 2 == 0) {
+            insert(vertex.children[c], s);
+        }
+
+    }
+
+    private void fill(Node vertex) {
+        if (vertex.num == 0) {
+            vertex.win = 0;
+            vertex.lose = 1;
+            return;
+        }
+        else {
+            int onlywin = 0, onlylose = 0, never = 0, always = 0;
+
+            for (Node x: vertex.children) {
+                if (x != null) {
+                    fill(x);
+                    if (x.win == 0 && x.lose == 0)
+                        never++;
+                    if (x.win == 0 && x.lose == 1)
+                        onlylose++;
+                    if (x.win == 1 && x.lose == 0)
+                        onlywin++;
+                    if (x.win == 1 && x.lose == 1)
+                        always++;
+                }
+            }
+
+            if (always == vertex.num) {
+                vertex.win = 0;
+                vertex.lose = 0;
+            }
+            else if (never > 0) {
                 vertex.win = 1;
-                if (vertex.lose == -1)
-                    vertex.lose = 0;
+                vertex.lose = 1;
             }
             else {
-                vertex.lose = 1;
-                if (vertex.win == -1)
+                if (always + onlywin == vertex.num) {
+                    vertex.lose = 1;
                     vertex.win = 0;
+                }
+                else if (always + onlylose == vertex.num) {
+                    vertex.win = 1;
+                    vertex.lose = 0;
+                }
+                else if (always + onlywin + onlylose == vertex.num) {
+                    vertex.win = 1;
+                    vertex.lose = 1;
+                }
+
+
             }
-            insert(vertex.children[next], s);
         }
+    }
+
+    public int[] result() {
+        // if the starter can only win, returns 1
+        // if the starter can only lose, returns 2
+        // if the starter always gets what she wants, returns 3
+        // if the starter never gets what she wants, returns 4
+        fill(root);
+        int a[] = {root.win, root.lose};
+        return a;
     }
 
     public void insert(String s) {
         insert(root, s);
-    }
-
-    public boolean canWin() {
-        return root.win == 1;
-    }
-
-    public boolean canLose() {
-        return root.lose == 1;
     }
 
     public static void main(String[] args) {
@@ -66,22 +111,23 @@ public class Trie {
         int k = in.nextInt();
         Trie t = new Trie();
         for (int i = 0; i < n; i++) {
-            String s = in.next();
-            t.insert(s);
+            t.insert(in.next());
         }
-
-        if (t.canWin() && t.canLose()) {
+        int a[]= t.result();
+        int win = a[0], lose = a[1];
+        if (win == 0 && lose == 0) {
+            System.out.println("Second");
+        }
+        else if (win == 1 && lose == 1) {
             System.out.println("First");
         }
-        else if (t.canWin()) {
-            if (k % 2 == 0) {
+        else if (win == 1 && lose == 0) {
+            if (k % 2 == 0)
                 System.out.println("Second");
-            }
-            else {
+            else
                 System.out.println("First");
-            }
         }
-        else if (t.canLose()) {
+        else if (win == 0 && lose == 1) {
             System.out.println("Second");
         }
     }
