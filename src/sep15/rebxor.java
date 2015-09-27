@@ -58,6 +58,33 @@ class Trie {
         return query(root, x, 32);
     }
 
+
+    private int add(Node max, Node add, int x, int bits) {
+        if (bits == 0) {
+            return 0;
+        }
+        else {
+            Node nextmax = null;
+            int ans = 0;
+            int v = (x >> bits - 1) & 1;
+            int req = (v == 0) ? 1 : 0;
+            if (max.children[req] == null) {
+                nextmax = max.children[v];
+            }
+            else {
+                nextmax = max.children[req];
+                ans = (int) Math.pow(2, bits-1);
+            }
+            if (add.children[v] == null)
+                add.children[v] = new Node();
+            return (ans + add(nextmax, add.children[v], x, bits-1));
+        }
+    }
+
+    public int add(int x) {
+        return add(root, root, x, 32);
+    }
+
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         Trie t1 = new Trie();
@@ -71,27 +98,24 @@ class Trie {
         int ans = 0, prev = 0;
         for (i = n-1; i >= 0; i--) {
             prev = prev ^ a[i];
-            t1.addNumber(prev, i);
-            int x[] = t1.query(prev);
-            if (x[0] > ans) {
-                ans = x[0];
-                rev[i] = x[0];
+            int x = t1.add(prev);
+            if (x > ans) {
+                ans = x;
+                rev[i] = x;
             }
         }
         int ans2 = 0, max = 0;
         prev = 0;
         for (i = 0; i < n-1; i++) {
             prev = prev ^ a[i];
-            t2.addNumber(prev, i);
-            int x[] = t2.query(prev);
-            if (x[0] > ans2) {
-                ans2 = x[0];
+            int x = t2.add(prev);
+            if (x > ans2) {
+                ans2 = x;
             }
             if (ans2 + rev[i+1] > max) {
                 max = ans2 + rev[i+1];
             }
         }
         System.out.println(max);
-    }
-}
+    }}
 
