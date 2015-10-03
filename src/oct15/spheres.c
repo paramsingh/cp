@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#define BIG 1000000007
 
 int main(void) {
     int n, m, c;
@@ -32,11 +33,11 @@ int main(void) {
             // multiplying sum with dup[i] gives number of (j+1)-spheres
             // possible with radius i+1;
             long long int y = dup[i];
-            dup[i] = spheres[i] * sum;
-            aux += dup[i];
+            dup[i] = ((spheres[i] % BIG) * (sum % BIG)) % BIG;
+            aux += (dup[i] % BIG);
             sum += y;
         }
-        printf("%lld ", aux % 1000000007);
+        printf("%lld ", (aux % 1000000007));
     }
     return 0;
 }
