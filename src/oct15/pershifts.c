@@ -18,14 +18,41 @@ int main(void) {
         int *p   = (int *) calloc(n, 4);
         int *q   = (int *) calloc(n, 4);
         int *dup = (int *) calloc(n, 4);
+        int *nextp = (int *) calloc(n, 4);
+        int *nextq = (int *) calloc(n, 4);
         int i;
-        for (i = 0; i < n; i++)
+        int prev, first;
+        scanf("%d", &prev);
+        first = p[0] = prev;
+        for (i = 1; i < n; i++) {
             scanf("%d", p+i);
-        for (i = 0; i < n; i++) {
+            nextp[prev-1] = p[i];
+            prev = p[i];
+        }
+        nextp[prev-1] = first;
+        scanf("%d", &prev);
+        first = dup[0] = q[0] = prev;
+        for (i = 1; i < n; i++) {
             scanf("%d", q+i);
             dup[i] = q[i];
+            nextq[prev-1] = q[i];
+            prev = q[i];
         }
-        if (k % 2 == 0) {
+        nextq[prev-1] = first;
+        if (k == n) {
+            int flag = 1;
+            for (i = 0; i < n; i++) {
+                if (nextp[i] != nextq[i]) {
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag == 1)
+                printf("%d\n", q[0]);
+            else
+                printf("-1\n");
+        }
+        else if (k % 2 == 0) {
             int ans = 0;
             for (i = 0; i < n; i++) {
             }
