@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #define BIG 1000000007
 
-int merge(int *a, int lo, int hi, int mid, int* count);
-int msort(int* a, int lo, int hi, int* count) {
+int merge(int *a, int lo, int hi, int mid, long long int* count);
+int msort(int* a, int lo, int hi, long long int* count) {
     if (lo == hi)
         return 0;
     else {
@@ -15,7 +15,7 @@ int msort(int* a, int lo, int hi, int* count) {
     }
 }
 
-int merge(int *a, int lo, int hi, int mid, int* count) {
+int merge(int *a, int lo, int hi, int mid, long long int* count) {
     int size = hi - lo + 1;
     int i, j;
     int aux[size];
@@ -48,16 +48,27 @@ int merge(int *a, int lo, int hi, int mid, int* count) {
     return parity;
 }
 
-int rank(int* a, int* count, int* fact, int n) {
-    int r = 1;
+long long int rank(int* a, long long int* count, int* fact, int n) {
+    long long int r = 1;
     int i;
     for (i = 0; i < n; i++) {
         // bigger than a[i] on the left of a[i] = count[a[i]]
         // smaller than a[i] on the left of a[i] = i - count[a[i]]
         // smaller than a[i] on the right of a[i] = a[i] - 1 - i + count[a[i]]
         int x = a[i] - 1 - i + count[a[i]-1];
-        r = r + ((x % BIG) * (fact[n-i-1] % BIG)) % BIG;
+        r = (r + ((long long)(x)*(fact[n-i-1]))%BIG)%BIG;
     }
+    return r;
+}
+
+long long int rank2(int* a, long long int* count, int* fact, int n) {
+    long long int r = 0;
+    int i;
+    for (i = 0; i < n-2; i++) {
+        int x = a[i] - 1 - i + count[a[i]-1];
+        r = (r + ((((long long)(x) * 500000004) % BIG) * (long long)(fact[n-i-1])) % BIG) % BIG;
+    }
+    r = (r + 1) % BIG;
     return r;
 }
 
@@ -72,7 +83,8 @@ int main(void) {
     for (a = 0; a < t; a++) {
         int n, k;
         scanf("%d %d", &n, &k);
-        int p[n], q[n], dup[n], countp[n], countq[n];
+        int p[n], q[n], dup[n];
+        long long int countp[n], countq[n];
         int nextp[n], nextq[n];
         int i;
         int prev, first;
@@ -109,16 +121,14 @@ int main(void) {
         }
         else {
             int parityq = msort(dup, 0, n-1, countq);
-            long long int r = rank(q, countq, fact, n);
             if (k % 2 == 0) {
+                long long int r = rank(q, countq, fact, n);
                 printf("%lld\n", r);
             }
             else {
                 int parityp = msort(p, 0, n-1, countp);
                 if (parityp == parityq) {
-                    long long int x = (r * 500000004) % BIG;
-                    long long int y = ((((r+1) % BIG) * 500000004) % BIG);
-                    long long int m = x < y ? x : y;
+                    long long int m = rank2(q, countq, fact, n);
                     printf("%lld\n", m);
                 }
                 else
