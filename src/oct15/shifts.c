@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #define BIG 1000000007
 
-int merge(int *a, int lo, int hi, int mid, long long int* count);
-int msort(int* a, int lo, int hi, long long int* count) {
+int merge(int *a, int lo, int hi, int mid, int* count);
+int msort(int* a, int lo, int hi, int* count) {
     if (lo == hi)
         return 0;
     else {
@@ -15,7 +15,7 @@ int msort(int* a, int lo, int hi, long long int* count) {
     }
 }
 
-int merge(int *a, int lo, int hi, int mid, long long int* count) {
+int merge(int *a, int lo, int hi, int mid, int* count) {
     int size = hi - lo + 1;
     int i, j;
     int aux[size];
@@ -48,12 +48,12 @@ int merge(int *a, int lo, int hi, int mid, long long int* count) {
     return parity;
 }
 
-long long int rank(int* a, long long int* count, int* fact, int n) {
+long long int rank(int* a, int* count, int* fact, int n) {
     long long int r = 1;
     int i;
     for (i = 0; i < n; i++) {
-        // bigger than a[i] on the left of a[i] = count[a[i]]
-        // smaller than a[i] on the left of a[i] = i - count[a[i]]
+        // bigger than a[i] on the left of a[i] = count[a[i]-1]
+        // smaller than a[i] on the left of a[i] = i - count[a[i]-1]
         // smaller than a[i] on the right of a[i] = a[i] - 1 - i + count[a[i]]
         int x = a[i] - 1 - i + count[a[i]-1];
         r = (r + ((long long)(x)*(fact[n-i-1]))%BIG)%BIG;
@@ -61,7 +61,7 @@ long long int rank(int* a, long long int* count, int* fact, int n) {
     return r;
 }
 
-long long int rank2(int* a, long long int* count, int* fact, int n) {
+long long int rank2(int* a, int* count, int* fact, int n) {
     long long int r = 0;
     int i;
     for (i = 0; i < n-2; i++) {
@@ -79,12 +79,12 @@ int main(void) {
     int *fact = (int *) calloc(100001, 4);
     fact[0] = 1;
     for (a = 1; a < 100001; a++)
-        fact[a] = (fact[a-1] * a) % BIG;
+        fact[a] = (fact[a-1] * (long long)a) % BIG;
     for (a = 0; a < t; a++) {
         int n, k;
         scanf("%d %d", &n, &k);
         int p[n], q[n], dup[n];
-        long long int countp[n], countq[n];
+        int countp[n], countq[n];
         int nextp[n], nextq[n];
         int i;
         int prev, first;
