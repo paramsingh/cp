@@ -26,17 +26,16 @@ void knapsack(int* cost, int* fun, int w, int n) {
         }
     }
 
-    int net = 0, k = w;
-    for (i = n; i >= 1; i--) {
-        if (keep[i][k] == 1) {
-            net += cost[i-1];
-            k -= cost[i-1];
+    int k = dp[n][w];
+    int net;
+    for (i = 0; i <= w; i++) {
+        if (dp[n][i] == k) {
+            net = i;
+            break;
         }
     }
 
     printf("%d %d\n", net, dp[n][w]);
-    free(dp);
-    free(keep);
 }
 
 int main(void) {
