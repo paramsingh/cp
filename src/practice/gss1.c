@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#define MAX ((1 << 17) + 1)
+#define MAX ((1 << 18) + 1)
 
 int max(int a, int b) {
     return (a > b) ? a : b;
