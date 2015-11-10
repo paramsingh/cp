@@ -1,6 +1,3 @@
-// Author: Param Singh <paramsingh258@gmail.com>
-// Chef and collection of stamps: https://www.codechef.com/NOV15/problems/CHSTAMP
-
 import java.util.*;
 import java.io.*;
 
@@ -8,20 +5,22 @@ class Stamp {
     private class Edge {
         int day;
         int dest;
+        int max;
         Edge(int d, int des) {
             day = d;
             dest = des;
+            max = 0;
         }
     }
 
     private class Node {
         int val;
         List<Edge> adj;
-        Map<Integer, Integer> max;
+        int max;
         Node(int i) {
             val = i;
             adj = new ArrayList<Edge>();
-            max = new HashMap<Integer, Integer>();
+            max = 0;
         }
 
         void add(int day, int dest) {
@@ -30,13 +29,16 @@ class Stamp {
     }
 
     Node nodes[];
-    int maxd;
+    int max;
+    boolean visited[];
 
     Stamp() {
         nodes = new Node[50002];
-        for (int i = 0; i < 50002; i++)
+        visited = new boolean[50002];
+        for (int i = 0; i < 50002; i++) {
             nodes[i] = null;
-        maxd = -1;
+            visited[i] = false;
+        }
     }
 
     void add(int day, int x, int y) {
@@ -52,11 +54,57 @@ class Stamp {
         nodes[y].add(day, x);
     }
 
-    void findmax() {
+    static class Offer implements Comparable<Offer> {
+        int day, x, y;
+        Offer(int day, int x, int y) {
+            this.day = day;
+            this.x = x;
+            this.y = y;
+        }
+
+        public int compareTo(Offer o) {
+            if (this.day != o.day)
+                return this.day - o.day;
+            else {
+                if (this.x != o.x)
+                    return this.x - o.x;
+                else
+                    return this.y - o.y;
+            }
+        }
+    }
+
+    void solve() {
         int i;
-        for (i = 0; i < 50002; i++) {
-            if (nodes[i] != null && !nodes[i].max.containsKey(maxd)) {
-                find(nodes[i], maxd);
+        for (i = max; i >= 0; i--) {
+            if (nodes[i] != null) {
+                dfs(i, i, 50005);
+            }
+        }
+    }
+
+    void dfs(int i, int prop, int day) {
+        if (!visited[i]) {
+            visited[i] = true;
+            nodes[i].max = prop;
+        }
+        for (Edge e: nodes[i].adj) {
+            if (e.day > day)
+                break;
+            else {
+                if (e.max < prop) {
+                    e.max = prop;
+                    dfs(e.dest, prop, e.day);
+                }
+            }
+        }
+    }
+
+    void print() {
+        int i;
+        for (i = 1; i < max; i++) {
+            if (nodes[i] != null) {
+                System.out.println(i + " -> " + nodes[i].max);
             }
         }
     }
@@ -73,14 +121,33 @@ class Stamp {
             for (i = 0; i < n; i++) {
                 stamps[i] = in.nextInt();
             }
+            Offer o[] = new Offer[m];
+            int max = -1;
             for (i = 0; i < m; i++) {
                 int d = in.nextInt();
                 int x = in.nextInt();
                 int y = in.nextInt();
-                graph.add(d, x, y);
-                if (graph.maxd < d)
-                    graph.maxd = d;
+                if (max < x)
+                    max = x;
+                if (max < y)
+                    max = y;
+                o[i] = new Offer(d, x, y);
             }
+            graph.max = max;
+            Arrays.sort(o);
+            for (i = 0; i < m; i++) {
+                graph.add(o[i].day, o[i].x, o[i].y);
+            }
+            graph.solve();
+            graph.print();
+            long sum = 0;
+            for (i = 0; i < n; i++) {
+                if (graph.nodes[stamps[i]] != null)
+                    sum += graph.nodes[stamps[i]].max;
+                else
+                    sum += stamps[i];
+            }
+            System.out.println(sum);
         }
     }
 }
