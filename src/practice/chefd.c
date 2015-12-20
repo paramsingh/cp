@@ -94,7 +94,7 @@ int main(void) {
     int n;
     scanf("%d", &n);
     a = (int *) calloc(n, sizeof(int));
-    tree = (struct node*) calloc(4*n, sizeof(int));
+    tree = (struct node*) calloc(4*n, sizeof(struct node));
     int i;
     for (i = 0; i < n; i++) {
         scanf("%d", &a[i]);
