@@ -1,3 +1,5 @@
+// Do a BFS from each of the soldiers until we reach a node that is patrolled by more
+// than one soldier or until all the nodes are covered. Then print the answer accordingly
 #include <bits/stdc++.h>
 #define mp make_pair
 using namespace std;

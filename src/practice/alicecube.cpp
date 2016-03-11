@@ -1,3 +1,5 @@
+// Start a bfs from the destination state to save all the answers in a precomputation
+// and then answer all the queries in O(1)
 #include <bits/stdc++.h>
 using namespace std;
 
