@@ -1,4 +1,7 @@
-a.out
 *.hi
 *.class
 *.pyc
+*.in
+*.out
+in
+out
