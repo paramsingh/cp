@@ -1,4 +1,5 @@
-Codechef problems
-==================
+Competitive Programming
+=======================
 
-Repository to store solutions to Codechef problems.
+Repository to store my solutions to algorithmic problems on sites such
+as Codechef, SPOJ, codeforces, Project Euler etc.
