@@ -4,10 +4,10 @@ using namespace std;
 int puzzle[10][10];
 int cnt = 0;
 int fin = 0;
+int d = 0;
 int final_depth;
 
 void print_puzzle() {
-    printf("Currently the puzzle is as follows\n");
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++)
             printf("%d ", puzzle[i][j]);
@@ -101,10 +101,13 @@ int main(void) {
                 c = getchar_unlocked();
             }
         }
+        printf("Puzzle\n");
         print_puzzle();
         solve(1);
+        printf("Solution:\n");
         print_puzzle();
         printf("solved at depth = %d\n", final_depth);
+        d += final_depth;
         cnt = 0;
         int n = 0;
         for (int j = 0; j < 3; j++)
@@ -114,6 +117,7 @@ int main(void) {
     printf("final answer = %d\n", ans);
     printf("total number of nodes expanded = %d\n", fin);
     printf("average number of nodes expanded for one puzzle = %0.2f\n", fin / 50.0);
+    printf("average depth we went to: %0.2f\n", d / 50.0);
     return 0;
 }
 
