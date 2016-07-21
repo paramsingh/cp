@@ -4,6 +4,7 @@ using namespace std;
 int puzzle[10][10];
 int cnt = 0;
 int fin = 0;
+int final_depth;
 
 void print_puzzle() {
     printf("Currently the puzzle is as follows\n");
@@ -71,8 +72,10 @@ int solve(int depth) {
             }
         }
     }
-    if (solved)
+    if (solved) {
+        final_depth = depth;
         return 1;
+    }
 
     for (int i = 0; i < possible[mi][mj].size(); i++) {
         // put possible value in the puzzle and then solve further
@@ -101,6 +104,8 @@ int main(void) {
         print_puzzle();
         solve(1);
         print_puzzle();
+        printf("solved at depth = %d\n", final_depth);
+        cnt = 0;
         int n = 0;
         for (int j = 0; j < 3; j++)
             n = n * 10 + puzzle[0][j];
@@ -108,7 +113,7 @@ int main(void) {
     }
     printf("final answer = %d\n", ans);
     printf("total number of nodes expanded = %d\n", fin);
-    printf("average number of nodes expanded for one puzzle = %f\n", fin / 50.0);
+    printf("average number of nodes expanded for one puzzle = %0.2f\n", fin / 50.0);
     return 0;
 }
 
