@@ -9,7 +9,7 @@ paths.
 
 DP optimization using the convex hull trick
 
-## 23rd April 2017 - Codeforces
+## 23rd April 2017 - [Codeforces](http://codeforces.com/contest/793/standings/participant/12058923#p12058923)
 
 * A - An ad-hoc problem
 * B - Simple BFS
