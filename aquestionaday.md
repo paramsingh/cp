@@ -24,3 +24,8 @@ submasks of a bitmask.
 
 Simple Dynamic Programming problem, sourced from A2OJ. The state here was the index that we are
 trying to fill and the previous number that we filled.
+
+## 3rd June 2017 - [Vladik and Memorable Trip](http://codeforces.com/contest/811/problem/C)
+
+Dynamic Programming on prefix of an array. Pretty obvious dp where you try
+to make segments. But I'm out of practice, so yeah, took me some time.
